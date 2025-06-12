@@ -84,7 +84,9 @@ elif choice == "📞 Contact Info":
     - **📧 Email**: clinic@example.com  
     - **📍 Address**: 123 Health Street, Wellness City  
     """)
-    st.image("https://via.placeholder.com/400x200.png?text=Clinic+Image", caption="Our Clinic", use_column_width=True)
+
+    st.image("content/image.jpg", caption="Our Clinic", use_column_width=True)
+
 
 # Footer
 st.sidebar.markdown("---")

@@ -2,41 +2,31 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-# Load initial data
-def load_data():
-    data = {
-        'Name': ['John Doe', 'Jane Smith', 'Emily Davis', 'Michael Brown'],
-        'Age': [34, 29, 42, 36],
-        'Gender': ['Male', 'Female', 'Female', 'Male'],
-        'Last Visit': ['2024-10-15', '2024-10-10', '2024-11-01', '2024-10-20'],
-        'Next Appointment': ['2024-11-20', '2024-11-25', '2024-11-30', '2024-11-22'],
-        'Notes': [
-            'Needs follow-up on test results',
-            'Routine check-up',
-            'Dietary consultation',
-            'Blood pressure monitoring'
-        ]
-    }
-    return pd.DataFrame(data)
+# Initial sample data (built-in, no CSV file needed)
+data = {
+    'Name': ['John Doe', 'Jane Smith', 'Emily Davis', 'Michael Brown'],
+    'Age': [34, 29, 42, 36],
+    'Gender': ['Male', 'Female', 'Female', 'Male'],
+    'Last Visit': ['2024-10-15', '2024-10-10', '2024-11-01', '2024-10-20'],
+    'Next Appointment': ['2024-11-20', '2024-11-25', '2024-11-30', '2024-11-22'],
+    'Notes': [
+        'Needs follow-up on test results',
+        'Routine check-up',
+        'Dietary consultation',
+        'Blood pressure monitoring'
+    ]
+}
+df = pd.DataFrame(data)
 
-# Save data
-def save_data(df):
-    df.to_csv("clients.csv", index=False)
-
-# Try to load existing data if available
-try:
-    df = pd.read_csv("clients.csv")
-except FileNotFoundError:
-    df = load_data()
-    save_data(df)
-
-# Streamlit app
+# Streamlit app config
 st.set_page_config(page_title="Clinic Data Dashboard", layout="wide")
 
+# Sidebar navigation
 st.sidebar.title("Dashboard Navigation")
 menu = ["Overview", "Add Client", "Contact"]
 choice = st.sidebar.radio("Go to", menu)
 
+# Main Pages
 if choice == "Overview":
     st.title("Clinic Data Dashboard")
     st.subheader("Client Overview")
@@ -69,9 +59,10 @@ elif choice == "Add Client":
                 'Next Appointment': next_appointment.strftime('%Y-%m-%d'),
                 'Notes': notes
             }
-            df = pd.concat([df, pd.DataFrame([new_entry])], ignore_index=True)
-            save_data(df)
+            # Append new entry to dataframe (temporary, not saved to file)
+            df.loc[len(df)] = new_entry
             st.success("Client added successfully!")
+            st.dataframe(df)
 
 elif choice == "Contact":
     st.title("Contact Information")

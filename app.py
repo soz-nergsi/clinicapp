@@ -2,22 +2,37 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-# Load existing data or create a new one
+# Initial data as seen in your screenshot
+initial_data = {
+    "Name": ["John Doe", "Jane Smith", "Emily Davis", "Michael Brown"],
+    "Age": [34, 29, 42, 36],
+    "Gender": ["Male", "Female", "Female", "Male"],
+    "Last Visit": ["2024-10-15", "2024-10-10", "2024-11-01", "2024-10-20"],
+    "Next Appointment": ["2024-11-20", "2024-11-25", "2024-11-30", "2024-11-22"],
+    "Notes": [
+        "Needs follow-up on test results",
+        "Routine check-up",
+        "Dietary consultation",
+        "Blood pressure monitoring"
+    ]
+}
+
+# Try to load saved data or use initial data
 @st.cache_data
 def load_data():
     try:
         df = pd.read_csv("clients.csv")
     except FileNotFoundError:
-        df = pd.DataFrame(columns=["Name", "Age", "Gender", "Last Visit", "Next Appointment", "Notes"])
+        df = pd.DataFrame(initial_data)
     return df
 
 def save_data(df):
     df.to_csv("clients.csv", index=False)
 
-# Initialize data
+# Load data
 df = load_data()
 
-# Page config
+# Streamlit page setup
 st.set_page_config(page_title="Clinic Data Dashboard", layout="wide")
 
 st.title("Clinic Data Dashboard")
@@ -53,8 +68,8 @@ elif choice == "Add Client":
                 "Name": [name],
                 "Age": [age],
                 "Gender": [gender],
-                "Last Visit": [last_visit],
-                "Next Appointment": [next_appointment],
+                "Last Visit": [last_visit.strftime("%Y-%m-%d")],
+                "Next Appointment": [next_appointment.strftime("%Y-%m-%d")],
                 "Notes": [notes]
             })
             df = pd.concat([df, new_data], ignore_index=True)
